@@ -1,3 +1,7 @@
+This is a fork of Christoph Lendenfeld's onion skin renderer with a few bug fixes and minor additions of my own. Lendenfeld's original readme is reproduced in it's entirety below.
+
+-- Raf Anzovin
+
 # OnionSkinRenderer
 
 Hello there, I am a technical animator or animTD or whatever you want to call it.
