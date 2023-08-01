@@ -107,7 +107,9 @@ class OSRController(MayaQWidgetDockableMixin, QtWidgets.QMainWindow, ui_window.U
         self.absoluteFramesSet = set()
         self.preferences = {}
         self.relativeFrameCount = 8
-        self.toolPath = os.path.dirname(os.path.abspath(inspect.stack()[0][1]))
+        self.settingsPath = cmds.internalVar(usd=True)
+        self.defaultSettingsPath = os.path.dirname(os.path.abspath(inspect.stack()[0][1]))
+        self.settingsFileName = "onionSkinSettings.json"
         self.activeEditor = None
 
         # create the ui from the compiled qt designer file
@@ -481,7 +483,13 @@ class OSRController(MayaQWidgetDockableMixin, QtWidgets.QMainWindow, ui_window.U
 
     #
     def loadSettings(self):
-        with open(os.path.join(self.toolPath,'settings.txt')) as json_file:
+        settings_path = (
+            self.settingsPath
+            if os.path.exists(os.path.join(self.settingsPath, self.settingsFileName))
+            else self.defaultSettingsPath
+        )
+
+        with open(os.path.join(settings_path, self.settingsFileName)) as json_file:
             self.preferences = json.load(json_file)
             self.settings_autoClearBuffer.setChecked(self.preferences.setdefault('autoClearBuffer',True))
             core.OSR_INSTANCE.setAutoClearBuffer(self.preferences.setdefault('autoClearBuffer',True))
@@ -531,8 +539,9 @@ class OSRController(MayaQWidgetDockableMixin, QtWidgets.QMainWindow, ui_window.U
         data['drawBehind'] = self.drawBehind_chkBx.isChecked()
         data['activeRelativeFrames'] = self.getActiveRelativeFrameIndices()
 
-        with open(os.path.join(self.toolPath,'settings.txt'), 'w') as outfile:
+        with open(os.path.join(self.settingsPath, self.settingsFileName), 'w') as outfile:
             json.dump(data, outfile)
+
         if DEBUG_ALL: print('end save')
 
     #
