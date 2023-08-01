@@ -537,7 +537,7 @@ class OSRController(MayaQWidgetDockableMixin, QtWidgets.QMainWindow, ui_window.U
 
     #
     def extractRGBFromStylesheet(self, s):
-        return map(int,(s[s.find("(")+1:s.find(")")]).split(','))
+        return list(map(int,(s[s.find("(")+1:s.find(")")]).split(',')))
 
     def getActiveRelativeFrameIndices(self):
         activeFrames = []
